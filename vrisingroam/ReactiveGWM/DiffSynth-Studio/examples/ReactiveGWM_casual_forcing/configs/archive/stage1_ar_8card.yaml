@@ -1,0 +1,10 @@
+# Stage 1 AR Diffusion Teacher Forcing — 仅覆盖差异项
+stage: ar_tf
+
+max_steps: 50000
+save_steps: 2500
+
+output_path: /nfs/zeqingwang/models/train/sf3_casual_forcing/stage1_ar
+
+# sanity 推理: Stage 1/2 用 50 步 multi-step flow-match per frame
+sanity_sample_diffusion_steps: 50

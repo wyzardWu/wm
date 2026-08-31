@@ -1,0 +1,18 @@
+# Stage 1 AR-TF — vrising rehearsal (pipeline validation on the 30k teacher).
+# Paths come from BASE_CKPT / WAN_BASE_DIR / TOKENIZER_DIR / DATA_ROOT /
+# METADATA_PATH / OUT env vars at launch.
+stage: ar_tf
+
+game: vrising
+use_csv_prompt: false
+action_hold_window: 1          # vrising parquets are true per-frame signals
+
+# Rehearsal budget (author ceiling is 100k; DreamX sibling runs used ~4k).
+max_steps: 6000
+save_steps: 1000
+
+# 3 ranks x grad_accum 2 = global batch 6 (author recipe: 4x2=8; recorded
+# deviation for the rehearsal — revisit if loss is noticeably noisier).
+gradient_accumulation_steps: 2
+
+output_path: runs/cf_stage1_ar

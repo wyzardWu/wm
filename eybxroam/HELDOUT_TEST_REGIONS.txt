@@ -1,0 +1,6 @@
+fortressA
+shipPrologueA
+willsFarmA
+sacramentPlayerHousingInteriorB
+phalenChurch
+coastTowerCellar

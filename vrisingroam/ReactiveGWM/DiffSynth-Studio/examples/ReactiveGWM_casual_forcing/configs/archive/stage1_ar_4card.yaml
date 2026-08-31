@@ -1,0 +1,17 @@
+# Stage 1 AR-TF — 4-card variant (GPU 4-7).
+# Same as stage1_ar.yaml but gradient_accumulation_steps=2 so the global
+# effective batch stays 8 (4 ranks x 2 accum), matching the original 8-card
+# training dynamics / lr / data budget exactly. Resume from a state-N/ written
+# by the 8-card run is loss-free (DDP model+optimizer are full replicas).
+stage: ar_tf
+
+max_steps: 50000
+save_steps: 2500
+
+# 4 ranks x 2 = global batch 8 (== original 8-card run)
+gradient_accumulation_steps: 2
+
+output_path: /nfs/zeqingwang/models/train/sf3_casual_forcing/stage1_ar
+
+# sanity: Stage 1/2 use 50-step multi-step flow-match per frame
+sanity_sample_diffusion_steps: 50

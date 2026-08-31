@@ -1,0 +1,34 @@
+AlayaWorld
+Copyright 2025-2026 Alaya Lab, Shanda AI Research Tokyo
+
+------------------------------------------------------------------------------
+License
+------------------------------------------------------------------------------
+This project is based on LTX-2 by Lightricks Ltd. Portions of the original LTX-2
+codebase (see flash_alaya/ltx2/) have been modified by Alaya Lab (Shanda AI
+Research Tokyo) for academic and research purposes only. The released weights
+(merged_infer.safetensors) are fine-tuned from the LTX-2.3-22B base and are a
+derivative of LTX-2.3.
+
+Accordingly, the entire project — code and weights — is released under the
+**LTX-2 Community License Agreement** (see the LICENSE file; upstream:
+https://github.com/Lightricks/LTX-2/blob/main/LICENSE). All original copyright,
+license, patent, trademark, and attribution notices from LTX-2 are retained.
+
+This project is for academic research and non-commercial use only. For
+commercial use of LTX-2 or its derivatives, contact Lightricks Ltd.
+(ltxv-licensing@lightricks.com); entities with >= $10M annual revenue require a
+commercial license from Lightricks.
+
+------------------------------------------------------------------------------
+Acknowledgements / third-party components (see THIRD_PARTY_LICENSES.md)
+------------------------------------------------------------------------------
+* LTX-2.3 (Lightricks) — base video generator; LTX-2 Community License.
+* Wan / Wan2.1 (Alibaba) — VAE and "WAN-style" module conventions; Apache 2.0.
+* TAEHV (madebyollin/taehv) — optional tiny decoder; MIT (notice kept in source).
+* Depth-Anything-3 (ByteDance-Seed) — spatial-memory depth; Apache 2.0 code.
+
+Third-party model weights NOT redistributed by this project (users obtain them
+from the original sources under those sources' licenses):
+* google/gemma-3-12b-it-qat-q4_0-unquantized — Gemma Terms of Use (text encoder)
+* depth-anything/DA3NESTED-GIANT-LARGE-1.1  — Depth-Anything-3 model license

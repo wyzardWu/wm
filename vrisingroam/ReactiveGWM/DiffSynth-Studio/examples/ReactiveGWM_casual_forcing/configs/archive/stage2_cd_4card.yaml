@@ -1,0 +1,26 @@
+# Stage 2 CD — 4-card variant (GPU 0-3). 与 stage2_cd.yaml 相同, 但
+# gradient_accumulation_steps=1 → 4 ranks x 1 = 全局 batch 4 (用户 2026-05-21 指定 grad_accum=1;
+# 比原 8-card / grad_accum=2 的全局 batch 8 小一半).
+# 2026-05-21 重启正式 run 用此配置 (Stage 2 跑 GPU 4-7).
+stage: cd
+
+max_steps: 50000
+save_steps: 2500
+
+# 4 ranks x 1 = global batch 4 (用户 2026-05-21 指定 grad_accum=1)
+gradient_accumulation_steps: 1
+
+student_init: /home/zeqingwang/zeqingwang/models/train/sf3_casual_forcing/stage1_ar/step-15000.safetensors
+
+output_path: /nfs/zeqingwang/models/train/sf3_casual_forcing/stage2_cd
+
+cd_discrete_N: 48
+cd_guidance_scale: 3.0
+cd_ema_decay: 0.99
+cd_ema_start_step: 200
+# fp32 EMA shadow 放 GPU: 省每步 CPU↔GPU 搬 5B 参数 (~18s/step→~0.5s), +约 20GB VRAM
+# (实测 CPU shadow 时 ~29s/step → 17 天 ETA; GPU shadow 后预计 ~11s/step). 2026-05-21
+cd_ema_shadow_device: cuda
+
+# CD 产物是 4-step 模型 → 用 4 步评 (set_timesteps(4) == 官方 warped [1000,750,500,250]).
+sanity_sample_diffusion_steps: 4

@@ -1,0 +1,112 @@
+run:
+  output_dir: ./outputs
+paths:
+  model: ./checkpoints/merged_infer.safetensors
+  gemma: ./checkpoints/gemma-3-12b-it-qat-q4_0-unquantized
+  da3_repo: ./checkpoints/Depth-Anything-3
+  da3_model: depth-anything/DA3NESTED-GIANT-LARGE-1.1
+  da3_cache: ./checkpoints/hf_cache
+  taehv: ./checkpoints/taeltx2_3_wide.pth
+sample:
+  height: 544
+  width: 960
+  fps: 24.0
+  temporal_stride: 8
+  spatial_stride: 32
+layout:
+  sink_latent_frames: 1
+  max_gap_sec: 0.0
+  history_latent_frames: 16
+  condition:
+    type: nearby
+    i2v_prob: 1.0
+    v2v_prob: 0.0
+  output:
+    latent_frames:
+    - 4
+    probs:
+    - 1.0
+  sink_remote: true
+  sink_remote_min_distance: 8
+memory:
+  compress_t: 1
+  compress_h: 2
+  compress_w: 2
+  lr_compress_t: 1
+  lr_compress_h: 2
+  lr_compress_w: 2
+  gate_init: 0.5
+  use_self_attn: true
+  use_lr_branch: true
+spatial_memory:
+  enabled: true
+  context_mode: target_prefix_pixels
+  depth_backend: da3
+  da3_process_res: 504
+  da3_process_res_method: upper_bound_resize
+  da3_device: auto
+  da3_align_to_input_scale: true
+  use_warped_context: true
+  retrieval_max_coverage: true
+  retrieval_depth_threshold: 0.1
+  num_context_frames: 10
+  require_full_context: true
+  retrieval_views: 1
+  cache_stride: 1
+  skip_recent_latents: 1
+  downsample: 4
+  constant_depth: 1.0
+  include_sink: false
+  include_nearby: true
+control:
+  candidates:
+  - - action
+  - []
+  probs:
+  - 1.0
+  - 0.0
+  action_scale: 0.1337,0.2769,2.021,0.00442,0.01026,0.00448
+  action_freq_scale: 1000.0
+  action_freq_dim_per_axis: 32
+validation:
+  enabled: true
+  sampling_steps: 4
+  scheduler: uniform
+  cfg_scale: 1.0
+  stg_blocks: []
+  rescale_scale: 0.0
+  video_history_latent_frames: 16
+  ttc:
+    levels:
+    - 750
+    - 500
+    - 250
+    strength: 1.0
+    ref_action: false
+  modes:
+    default:
+      layout:
+        condition: i2v
+        output_latent_frames: 4
+        condition_latent_frames: 1
+        history_latent_frames: 16
+        max_gap_sec: 0.0
+        height: 544
+        width: 960
+      control:
+      - action
+      rollout_rounds: 5
+runtime:
+  dtype: bf16
+  attention_type: flash_attention_3
+  gradient_checkpointing: true
+  vae_chunk_size: 33
+  vae_decode_chunk_latents: 8
+  vae_decode_overlap_latents: 6
+  norm_by_fps: true
+  norm_by_max_frames: true
+  positional_embedding_max_pos: 20,2048,2048
+da3_infer:
+  enabled: true
+  input: playground/case1/case1
+  rounds: 45

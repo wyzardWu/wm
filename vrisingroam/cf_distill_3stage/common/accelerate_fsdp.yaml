@@ -1,0 +1,32 @@
+# Accelerate + FSDP config for GameMaster 5B training.
+# Shards params/grads/optimizer across GPUs (FULL_SHARD) and wraps each DiTBlock.
+# Edit `num_processes` to the number of GPUs you launch on.
+compute_environment: LOCAL_MACHINE
+distributed_type: FSDP
+mixed_precision: bf16
+use_cpu: false
+machine_rank: 0
+num_machines: 1
+num_processes: 8                      # <-- set to your GPU count
+rdzv_backend: static
+same_network: true
+fsdp_config:
+  fsdp_sharding_strategy: FULL_SHARD
+  fsdp_auto_wrap_policy: TRANSFORMER_BASED_WRAP
+  fsdp_transformer_layer_cls_to_wrap: DiTBlock
+  fsdp_backward_prefetch: BACKWARD_PRE
+  fsdp_state_dict_type: SHARDED_STATE_DICT
+  fsdp_offload_params: false
+  fsdp_use_orig_params: true          # REQUIRED — do not set false. The optimizer is built
+                                      # over model.parameters() BEFORE accel.prepare()/FSDP-wrap
+                                      # and is never remapped (FSDP1). Only true keeps the original
+                                      # Parameter objects alive (FSDP reassigns their .data to
+                                      # sharded views in place). With false, FSDP replaces them with
+                                      # a FlatParameter, the optimizer steps stale tensors, gets no
+                                      # grads, and the model silently never learns (no error).
+  fsdp_sync_module_states: true       # rank0 loads Wan base, broadcasts to others
+  fsdp_cpu_ram_efficient_loading: true
+  fsdp_activation_checkpointing: false  # we do checkpointing inside the model
+downcast_bf16: 'no'
+tpu_use_cluster: false
+tpu_use_sudo: false

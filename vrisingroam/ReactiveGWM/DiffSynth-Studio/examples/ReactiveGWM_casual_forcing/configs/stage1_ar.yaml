@@ -1,0 +1,23 @@
+# Stage 1 AR-TF — canonical (官方 CF++ 对齐修正版, sf3_casual_forcing_2 lineage).
+#
+# 背景: 旧 8 卡 run (configs/archive/stage1_ar_8card.yaml → 旧 sf3_casual_forcing/, commit
+#   3546115 旧语义) 有 4 处不对齐官方: uniform-across-frames t / [20,980] 截断 / 无
+#   training_weight / beta1=0.9. ar_tf.py + model_fn_causal_forcing TF 路径已是修正版
+#   (与官方 ar_diffusion_tf_framewise 逐行/数学等价: 逐帧独立 t / 全 [0,1000) 范围 /
+#   per-frame training_weight / beta1=0.0). 本配置用修正代码从 base_ckpt 从头重训.
+#
+# 启动 (GPU 0-3, 4 卡 DDP):
+#   CUDA_VISIBLE_DEVICES=0,1,2,3 NUM_PROCESSES=4 \
+#   bash examples/ReactiveGWM_casual_forcing/launch/stage1_ar.sh
+stage: ar_tf
+
+max_steps: 100000
+save_steps: 2000
+
+# 4 卡(GPU 0-3) × grad_accum 2 = 全局 batch 8 (对齐原 8 卡训练动态 / lr / 数据预算)
+gradient_accumulation_steps: 2
+
+output_path: /nfs/zeqingwang/models/train/sf3_casual_forcing_2/stage1_ar
+
+# sanity: Stage 1 用 50 步 multi-step flow-match per frame
+sanity_sample_diffusion_steps: 50

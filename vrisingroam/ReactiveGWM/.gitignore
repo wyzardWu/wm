@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+build/
+dist/
+
+# Claude Code session data
+.claude/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Default example.py output (use --out <path> for persistent outputs)
+out.mp4
+
+# Source MOVs for assets/SF{2,3}.gif — kept locally, not in repo
+# (too large for plain git; regenerate GIFs via ffmpeg if/when needed)
+assets/*.mov

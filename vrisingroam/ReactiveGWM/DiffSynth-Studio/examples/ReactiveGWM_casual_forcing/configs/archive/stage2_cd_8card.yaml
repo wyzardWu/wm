@@ -1,0 +1,25 @@
+# Stage 2 Causal Consistency Distillation (CF++) — 仅覆盖差异项 (8-card 默认语义)
+# 共享键见 default.yaml; CD 关键算法点见 PLAN.md §2 Stage 2.
+stage: cd
+
+max_steps: 50000
+save_steps: 2500
+
+# Stage 1 产物作为 student-init + teacher.
+#   当前用 step-15000 (Stage 1 仍在训, 这是替身; 等 step-50000 后理想换最终 teacher 重训).
+#   teacher 默认 = student_init; 可用环境变量 STUDENT_INIT / TEACHER_CKPT 覆盖.
+student_init: /home/zeqingwang/zeqingwang/models/train/sf3_casual_forcing/stage1_ar/step-15000.safetensors
+
+output_path: /nfs/zeqingwang/models/train/sf3_casual_forcing/stage2_cd
+
+# CD 超参 (default.yaml 已有, 这里显式重申)
+cd_discrete_N: 48
+cd_guidance_scale: 3.0
+cd_ema_decay: 0.99
+cd_ema_start_step: 200
+
+# sanity: CD 产物是 4-step 模型 → 用 4 步评 (用 EMA 权重推理).
+# set_timesteps(4) 的 timesteps = [1000, 937.5, 833.33, 625], 与官方 warped
+# denoising_step_list=[1000,750,500,250] 完全一致 (σ_raw=[1,.75,.5,.25] 过 shift=5).
+# (Stage 1 teacher 是 multi-step 扩散模型才用 50 步; CD/few-step 不该用 50.)
+sanity_sample_diffusion_steps: 4

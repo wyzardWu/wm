@@ -1,0 +1,25 @@
+# AlayaWorld — unified requirements (training + all three inference paths).
+# Versions are lower bounds verified end-to-end on torch 2.7.1 + CUDA 12.8.
+torch>=2.7.1
+torchvision
+transformers>=4.51
+safetensors
+diffusers
+accelerate
+einops
+PyYAML
+numpy
+scipy
+opencv-python
+imageio
+imageio-ffmpeg
+Pillow
+tqdm
+decord
+huggingface-hub
+# Optional acceleration: flash-attn (FA2); flash-attn-3 (Hopper) must be built yourself.
+#
+# Depth-Anything-3 (spatial-memory depth for the da3 inference path) is a code
+# repo, not a PyPI package. Install it AFTER the pins above:
+#     git clone https://github.com/ByteDance-Seed/Depth-Anything-3 third_party/Depth-Anything-3
+#     pip install -e third_party/Depth-Anything-3

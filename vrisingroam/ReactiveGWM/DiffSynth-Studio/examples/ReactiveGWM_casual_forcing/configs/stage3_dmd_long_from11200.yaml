@@ -1,0 +1,61 @@
+# Stage 3 DMD long rollout from step-11200 generator weights.
+# Fresh run: generator initializes from STUDENT_INIT/this file, optimizer/critic/EMA start fresh.
+stage: dmd
+mixed_precision: "no"
+
+max_steps: 50000
+save_steps: 500
+
+student_init: /home/zeqingwang/zeqingwang/models/train/sf3_casual_forcing_2/stage3_dmd/step-11200.safetensors
+output_path: /home/zeqingwang/zeqingwang/models/train/sf3_casual_forcing_2/stage3_dmd_long_from11200
+
+# DMD 4-step + long-tail rollout: rollout up to 101 frames, score only tail 26 frames.
+dmd_score_frames: 26
+dmd_long_rollout: true
+dmd_rollout_min_frames: 26
+dmd_rollout_max_frames: 101
+dmd_rollout_force_max_prob: 0.2
+
+# Action continuation for long rollout when real action prefix is not long enough.
+dmd_random_action_extend: true
+dmd_action_extend_mode: preset_chunks
+dmd_action_chunk_frames: 10
+dmd_random_action_neutral_prob: 0.3
+dmd_random_action_direction_prob: 0.4
+
+# Tail re-anchor for long rollout stability.
+dmd_tail_reanchor: vae
+dmd_reanchor_decode_latents: 5
+
+same_step_across_blocks: true
+ts_schedule: false
+denoising_loss_type: flow
+real_guidance_scale: 3.0
+fake_guidance_scale: 0.0
+dmd_timestep_clamp: [20, 980]
+dfake_gen_update_ratio: 5
+lr: 2.0e-6
+lr_critic: 4.0e-7
+beta1: 0.0
+beta2: 0.999
+beta1_critic: 0.0
+beta2_critic: 0.999
+dmd_ema_decay: 0.99
+dmd_ema_start_step: 200
+
+# Training KV-cache window aligned with long-video inference.
+dmd_train_kv_window: 16
+dmd_train_sink: 2
+
+# Memory behavior for stable 4-card FSDP run.
+dmd_ema_shadow_device: cpu
+dmd_empty_cache_each_phase: false
+dmd_gc_interval: 0
+dmd_keep_last_ckpts: 0
+dmd_teacher_offload_cpu: true
+
+# Existing runner spawns sanity sample after each save.
+sanity_sample_sampler: dmd
+sanity_sample_guidance_scale: 3.0
+sanity_sample_memory_fraction: 0.45
+sanity_sample_diffusion_steps: 4

@@ -1,0 +1,30 @@
+# Stage 2 Causal Consistency Distillation (CF++) — canonical (sf3_casual_forcing_2 lineage).
+# 共享键见 default.yaml; CD 关键算法点见 PLAN.md §2 Stage 2.
+#
+# 启动 (GPU 0-3, 4 卡 DDP):
+#   CUDA_VISIBLE_DEVICES=0,1,2,3 NUM_PROCESSES=4 \
+#   bash examples/ReactiveGWM_casual_forcing/launch/stage2_cd.sh
+stage: cd
+
+max_steps: 50000
+save_steps: 2500
+
+# 4 ranks x grad_accum 1 = 全局 batch 4 (用户 2026-05-21 指定 grad_accum=1).
+gradient_accumulation_steps: 1
+
+# Stage 1 (aligned 重训) 最终产物作 student-init + teacher (teacher 默认 = student_init).
+#   STUDENT_INIT / TEACHER_CKPT env 仍可覆盖.
+student_init: /home/zeqingwang/zeqingwang/models/train/sf3_casual_forcing_2/stage1_ar/step-24000.safetensors
+
+output_path: /home/zeqingwang/zeqingwang/models/train/sf3_casual_forcing_2/stage2_cd
+
+# CD 超参 (default.yaml 已有, 这里显式重申).
+cd_discrete_N: 48
+cd_guidance_scale: 3.0
+cd_ema_decay: 0.99
+cd_ema_start_step: 200
+# fp32 EMA shadow 放 GPU: 省每步 CPU<->GPU 搬 5B 参数, +约 20GB VRAM (2026-05-21).
+cd_ema_shadow_device: cuda
+
+# CD 产物是 4-step 模型 → 用 4 步评 (set_timesteps(4) == 官方 warped [1000,750,500,250]).
+sanity_sample_diffusion_steps: 4

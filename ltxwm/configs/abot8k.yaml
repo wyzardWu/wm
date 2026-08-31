@@ -1,0 +1,41 @@
+model:
+  model_path: /data/yuzhewu/ltxwm/ltx-2.3-22b-dev.safetensors
+  text_encoder_path: /data/yuzhewu/ltxwm/gemma-3-12b-it
+  training_mode: lora
+  load_checkpoint: null
+lora:
+  rank: 32
+  alpha: 32
+  dropout: 0.0
+  target_modules:
+  - attn1.to_k
+  - attn1.to_q
+  - attn1.to_v
+  - attn1.to_out.0
+  - attn2.to_k
+  - attn2.to_q
+  - attn2.to_v
+  - attn2.to_out.0
+training_strategy:
+  name: flexible
+  video:
+    is_generated: true
+    latents_dir: latents
+    conditions:
+    - type: first_frame
+      probability: 1.0
+optimization:
+  learning_rate: 0.0002
+  steps: 20000
+  batch_size: 1
+  gradient_accumulation_steps: 1
+  enable_gradient_checkpointing: true
+data:
+  preprocessed_data_root: /data/yuzhewu/ltxwm/data/train8k_precomp
+validation:
+  interval: null
+output_dir: /data/yuzhewu/ltxwm/runs/abot8k
+checkpoints:
+  interval: 1000
+  keep_last_n: -1
+  save_training_state: full

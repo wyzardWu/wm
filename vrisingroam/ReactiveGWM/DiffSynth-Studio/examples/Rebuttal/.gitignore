@@ -1,0 +1,7 @@
+__pycache__/
+.pytest_cache/
+generated/*
+!generated/.gitignore
+outputs/
+cache/
+logs/

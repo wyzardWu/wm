@@ -1,0 +1,159 @@
+
+*~
+._*
+*$py.class
+.agents/
+*.avi
+backup/
+bak/
+benchmarks/
+*.bin
+build/
+.cache/
+cache/
+# (candidate-selection pools like select_*, staging, etc.) is internal.
+**/checkpoint-*/
+checkpoints/
+*.ckpt
+.claude/
+# Claude Code local skills/config (not committed)
+CLAUDE.md
+.codex/
+# ===== Config / secrets =====
+*.cover
+.coverage
+.coverage.*
+coverage.xml
+/data/
+demo/
+desktop.ini
+develop-eggs/
+dist/
+dlc/
+# DLC job records + logs (local runtime)
+docs/camera_6d_distribution_all_datasets_no_relic/
+.DS_Store
+.DS_Store?
+*.egg
+*.egg-info/
+.eggs/
+eggs/
+ehthumbs.db
+.env
+env/
+ENV/
+env.bak/
+.env.*.local
+.env.local
+eval_sets/
+# ===== Experiment tracking =====
+*.flac
+# ===== Generated analysis docs =====
+# ===== Generated media =====
+*.gif
+htmlcov/
+.idea/
+# ===== IDE / editors =====
+!inference/run.sh
+# in; never committed). See inference/README.md for how to obtain them.
+# ===== Internal operational tools / scratch (never published) =====
+# Internal reference clips / example assets (not for publish; used by bak/ tooling)
+# Internal task-definition / working notes (not for publish)
+*.ipynb_checkpoints
+.ipynb_checkpoints/
+ipython_config.py
+# ===== Jupyter / IPython =====
+*.key
+# ===== Large runtime directories =====
+lightning_logs/
+.local/
+# ===== Local agent metadata =====
+*.log
+*.log.*
+logs/
+logs_*/
+# Merged inference weights live under checkpoints/ (user downloads/symlinks them
+*.mkv
+mlruns/
+# ===== Model weights / data =====
+*.mov
+*.mp3
+*.mp4
+.mypy_cache/
+node_modules/
+# Next.js build output from reactor/demo. Ignored at the root rather than only in
+# that folder, because Next writes to an absolute path and a dev server left
+# running across a move recreates it where the folder used to be.
+.next/
+*.tsbuildinfo
+# The `demo/` rule above matches any directory of that name, which would drop the
+# browser demo's source. Re-include that one directory; its own .gitignore still
+# keeps its dependencies and build output out.
+!reactor/demo/
+.nox/
+*.npy
+*.npz
+*.onnx
+# ===== Open-source deliverable: keep these despite the broad *.sh / *.pt rules above =====
+# ===== OS files =====
+# ===== Other common caches =====
+output/
+outputs/
+outputs_*/
+*.pem
+pip-delete-this-directory.txt
+pip-log.txt
+*.pkl
+playground/*
+!playground/case*/
+!playground/case*/*_camera.pt
+# playground: publish ONLY case1/case2 (un-ignored below); everything else there
+profile_default/
+.project
+*.pt
+*.pth
+__pycache__/
+*.py[cod]
+.pydevproject
+.pyre/
+.pytest_cache/
+# ===== Python =====
+.pytype/
+.ruff_cache/
+runs/
+*.safetensors
+scripts/inference/tmp_codes/
+secrets.json
+secrets.yaml
+.settings/
+*.so
+.Spotlight-V100
+*.swn
+*.swo
+*.swp
+# ===== Temporary code =====
+# ===== Test / coverage =====
+third_party/
+Thumbs.db
+tmp/
+tmp_*/
+**/tmp_codes/
+tmp_codes/
+.tox/
+.Trashes
+# ===== Type-check / lint caches =====
+.venv/
+venv/
+venv.bak/
+# ===== Virtual environments =====
+.vscode/
+wandb/
+*.wav
+*.webm
+weights/
+# ===== Weights / datasets / caches (place them here; never commit) =====
+wheels/
+*.whl
+
+# weights symlink (points at local storage)
+checkpoints
